@@ -2,7 +2,7 @@
 title: "Regression Models Course Project - Motor Trend"
 author: "Rohit Padebettu"
 date: "October 2, 2016"
-output: pdf_document
+output: html_document
 ---
 
 ## **Executive Summary**
@@ -59,17 +59,20 @@ We run a few standard diagnostics on the model we selected to not only ensure th
 
 
 ---------------
-## Appendix
+# Appendix
 
-### Plot 1 
+## Plot 1 
+
 #### Boxplot of MPG distribution split by type of Transmission (Auto:0, Manual:1)
-```{r, eval=TRUE}
-plot(mtcars$am,mtcars$mpg)
+```{r, echo=FALSE,fig.height=4,fig.width=4,fig.align= "left"}
+plot(mtcars$am,mtcars$mpg,main="Car Mileage", 
+  	xlab="Type of Transmission", ylab="Miles Per Gallon",col = c("red","blue"))
 ```
 
-### Plot 2
+## Plot 2
+
 #### Relationship between MPG and Weight broken down by Transmission 
-```{r, eval=TRUE}
+```{r, echo=FALSE,fig.height=4,fig.width=8,fig.align= "left"}
 g<-ggplot(mtcars,aes(x=wt,y=mpg))+
      geom_point(aes(color = cyl))+
      geom_smooth(method = "lm") +
@@ -77,36 +80,28 @@ g<-ggplot(mtcars,aes(x=wt,y=mpg))+
  print(g)
 ```
 
-### Other Models
+## Other Models
+
 We considered a few other models simplifying the selected model further, but we rejected all of them because 1. They worsened the `AIC` and 2. They biased the remaining `wt` variable further leading us to beleive `wt` has a greater impact on `mpg`.
 ```{r, echo=TRUE}
 mdl2 <-lm(mpg ~ wt+am-1 ,mtcars)
-extractAIC(mdl2)
-summary(mdl2)$coef
- 
 mdl3 <-lm(mpg ~ wt+qsec-1 ,mtcars)
-extractAIC(mdl3)
-summary(mdl3)$coef 
-
 mdl4 <-lm(mpg ~ am-1 ,mtcars)
-extractAIC(mdl4)
-summary(mdl4)$coef
- 
+
+extractAIC(mdl);extractAIC(mdl2); extractAIC(mdl3); extractAIC(mdl4)
 anova(mdl,mdl2,mdl3)
 ```
 
-### Diagnostic Plots
-#### Residuals vs Fitted Plot
-```{r,echo=TRUE}
-plot(mdl, which = 1)
-```
 
-#### Q-Q Plot
-```{r,echo=TRUE}
+## Diagnostic Plots
+
+```{r,echo=FALSE,fig.height=4,fig.width=8,fig.align= "left"}
+par(mfrow=c(1,2))
+plot(mdl, which = 1)
 plot(mdl, which = 2)
 ```
 
-#### Influence Index Plot
-```{r,echo=TRUE}
+#### Plot of Influence Measures from Car package
+```{r,echo=TRUE,fig.height=6,fig.width=8,fig.align= "left"}
 influenceIndexPlot(mdl)
 ```
