@@ -25,7 +25,7 @@ summary(mtcars)
  
  # Fitting linear models starting with the full model
  full <- lm(mpg ~ .,mtcars)
- summary(full)
+ summary(full)$coefficients
  
  #Stepping backwards through various models
  search <-step(full,direction = "backward",trace = FALSE)
